@@ -4,7 +4,7 @@ import React from 'react';
 function LargeCard({item}) {
   return (
     <section className='relative py-16'>
-      <div className='relative h-[400px] min-w-[300px]'>
+      <div className='relative h-[400px] min-w-[200px]'>
         <Image className='rounded-2xl' src={item.img} alt={item.title} layout='fill' objectFit='cover' />
       </div>
       <div className='absolute top-1/2 left-10'>
