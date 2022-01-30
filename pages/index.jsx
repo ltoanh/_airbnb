@@ -1,10 +1,17 @@
 import Head from "next/head";
-import Image from "next/image";
 import Banner from "../components/Banner";
 import Header from "../components/Header";
-import styles from "../styles/Home.module.css";
+import LargeCard from "../components/LargeCard";
+import MediumCard from "../components/MediumCard";
+import SmallCard from "../components/SmallCard";
 
-export default function Home() {
+const largeCardItem = {
+  img: "https://links.papareact.com/4cj",
+  title: "The Greatest Outdoors",
+  description: "Wishlists curated by Airbnb.",
+  buttonText: "Get Inspired"
+}
+export default function Home({ exploreData, cardsData }) {
   return (
     <>
       <Head>
@@ -16,6 +23,38 @@ export default function Home() {
       <Header />
       {/* Banner */}
       <Banner />
+      <main className="max-w-6xl mx-auto px-16 md:px-8">
+        <section className="pt-6">
+          <h2 className="text-3xl font-semibold pb-5">Explore Nearby</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
+            {exploreData?.map((item, id) => (
+              <SmallCard key={id} item={item} />
+            ))}
+          </div>
+        </section>
+        <section>
+          <h2 className="text-3xl font-semibold py-5">Live Anywhere</h2>
+          <div className="flex space-x-4 overflow-x-auto">
+            {cardsData?.map((item, id) => (
+              <MediumCard key={id} item={item} />
+            ))}
+          </div>
+        </section>
+        <LargeCard item={largeCardItem} />
+      </main>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const exploreData = await fetch("https://jsonkeeper.com/b/4G1G").then((res) =>
+    res.json()
+  );
+
+  const cardsData = await fetch("https://jsonkeeper.com/b/VHHT").then((res) =>
+    res.json()
+  );
+  return {
+    props: { exploreData, cardsData },
+  };
 }
