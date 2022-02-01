@@ -12,8 +12,12 @@ import React, { useState } from "react";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
+import { useRouter } from "next/router";
 
-function Header() {
+function Header(props) {
+  // router
+  const router = useRouter();
+
   // search value
   const [searchValue, setSearchValue] = useState("");
 
@@ -29,20 +33,35 @@ function Header() {
     key: "selection",
   };
   const handleSelectedDate = (ranges) => {
-    console.log(ranges);
     setStartDate(ranges.selection.startDate);
     setEndDate(ranges.selection.endDate);
   };
 
   const resetSearchValue = () => {
     setSearchValue("");
+    setGuestNumber(1);
+  }
+
+  const handleSearch = () => {
+    router.push({
+      pathname: "/search",
+      query: {
+        location: searchValue,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        noOfGuests: guestNumber,
+      }
+    });
+
+    resetSearchValue();
   }
 
   return (
     <header className="sticky top-0 z-10 grid grid-cols-3 gap-x-3 bg-white p-4 md:px-6 shadow-md">
       {/* left */}
-      <div className="relative flex items-center h-10">
+      <div className="relative flex items-center h-10 cursor-pointer">
         <Image
+          onClick={() => router.push("/")}
           src="/logo-airbnb.png"
           alt="logo airbnb"
           layout="fill"
@@ -56,7 +75,7 @@ function Header() {
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           type="text"
-          placeholder="Start your search"
+          placeholder={props.input_value ?? "Start your search"}
           className="w-full outline-none px-1.5 text-gray-600"
         />
         {/* search icon */}
@@ -101,7 +120,7 @@ function Header() {
             <button onClick={resetSearchValue} className="text-gray-700 flex-1 outline-none active:scale-95 transition duration-150 ease-in">
               Cancel
             </button>
-            <button className="text-red-400 flex-1 outline-none active:scale-95 transition duration-150 ease-in">
+            <button onClick={handleSearch} className="text-red-400 flex-1 outline-none active:scale-95 transition duration-150 ease-in">
               Search
             </button>
           </div>
