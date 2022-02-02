@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { format } from "date-fns";
 import Image from "next/image";
 import InfoCard from "../components/InfoCard";
+import Map from "../components/Map";
 
 function Search({ searchResults }) {
   const router = useRouter();
@@ -49,7 +50,9 @@ function Search({ searchResults }) {
         </section>
 
         {/* right */}
-        <section className="hidden lg:block flex-grow">left</section>
+        <section className="hidden lg:block lg:min-w-[600px]">
+          <Map searchResults={searchResults}/>
+        </section>
       </main>
 
       <Footer />
